@@ -42,8 +42,17 @@ func init() {
 }
 
 func downloadEPUB(link, name, index string) (err error) {
+	// Replace slash
+	name = strings.Replace(name, "/", "-", -1)
+
 	// Check if file exist
 	if _, err := os.Stat(arguments.Output + "/" + index + "-" + name + ".epub"); !os.IsNotExist(err) {
+		fmt.Println(checkPre +
+			color.Yellow("[") +
+			color.Green(index) +
+			color.Yellow("]") +
+			color.Green(" Already downloaded: ") +
+			color.Yellow(name))
 		return err
 	}
 
@@ -72,6 +81,13 @@ func downloadEPUB(link, name, index string) (err error) {
 		log.Println(crossPre+color.Red(" Unable to write to the file:"), color.Yellow(err))
 		return err
 	}
+
+	fmt.Println(checkPre +
+		color.Yellow("[") +
+		color.Green(index) +
+		color.Yellow("]") +
+		color.Green(" Downloaded: ") +
+		color.Yellow(name))
 
 	return nil
 }
@@ -114,14 +130,6 @@ func scrapeBookPage(url string, index int, worker *sync.WaitGroup) {
 	if err != nil {
 		return
 	}
-
-	fmt.Println(checkPre +
-		color.Yellow("[") +
-		color.Green(index) +
-		color.Yellow("]") +
-		color.Green(" Downloaded: ") +
-		color.Yellow(name))
-
 }
 
 func main() {
