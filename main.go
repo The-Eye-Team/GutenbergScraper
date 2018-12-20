@@ -4,6 +4,7 @@ import (
 	"crypto/tls"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -63,6 +64,11 @@ func downloadEPUB(link, name, index string) (err error) {
 	resp, err := client.Get(link)
 	if err != nil {
 		fmt.Println(crossPre+color.Red(" Unable to download the file:"), color.Yellow(err))
+		text := []byte(link + "\n")
+		err = ioutil.WriteFile("./error.txt", text, 0644)
+		if err != nil {
+			return err
+		}
 		return nil
 	}
 	defer resp.Body.Close()
@@ -71,6 +77,11 @@ func downloadEPUB(link, name, index string) (err error) {
 	pictureFile, err := os.Create(arguments.Output + "/" + index + "-" + name + ".epub")
 	if err != nil {
 		log.Println(crossPre+color.Red(" Unable to create the file:"), color.Yellow(err))
+		text := []byte(link + "\n")
+		err = ioutil.WriteFile("./error.txt", text, 0644)
+		if err != nil {
+			return err
+		}
 		return err
 	}
 	defer pictureFile.Close()
@@ -79,6 +90,11 @@ func downloadEPUB(link, name, index string) (err error) {
 	_, err = io.Copy(pictureFile, resp.Body)
 	if err != nil {
 		log.Println(crossPre+color.Red(" Unable to write to the file:"), color.Yellow(err))
+		text := []byte(link + "\n")
+		err = ioutil.WriteFile("./error.txt", text, 0644)
+		if err != nil {
+			return err
+		}
 		return err
 	}
 
