@@ -73,7 +73,7 @@ func downloadEPUB(link, name, index string) (err error) {
 	}
 	defer resp.Body.Close()
 
-	// Create picture's file
+	// Create ebook's file
 	pictureFile, err := os.Create(arguments.Output + "/" + index + "-" + name + ".epub")
 	if err != nil {
 		log.Println(crossPre+color.Red(" Unable to create the file:"), color.Yellow(err))
